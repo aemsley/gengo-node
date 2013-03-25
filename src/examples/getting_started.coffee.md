@@ -6,7 +6,7 @@ Gengo makes it easy to plug human powered translation in to your service or plat
 
     $npm install gengo-node
 
-## require
+## Require
 
     Gengo = require Gengo
     gengoClient = new Gengo {public: YOUR_PUBLIC_KEY, private: your_private_key}
