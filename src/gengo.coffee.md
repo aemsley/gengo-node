@@ -122,6 +122,16 @@ This function expects an object containing [Gengo job payloads](http://developer
           as_group: if job_payloads.length is 1 then 0 else as_group
         @_makeRequest 'POST', 'translate/jobs/', callback, data
 
+      postQuote: (job_payloads, callback = (res) ->) ->
+        data =
+          jobs: job_payloads
+        @_makeRequest 'POST', 'service/quote/', callback, data
+
+      postFileQuote: (job_payloads, callback = (res) ->) ->
+        data =
+          jobs: job_payloads
+        @_makeRequest 'POST', 'service/quote/file/', callback, data
+
 ### Authenticating and making a request to the Gengo API
 All end points require a signature to be created against the timestamp of the call and the Gengo API private key.
 
