@@ -2,9 +2,11 @@
 
 Gengo makes it easy to plug human powered translation in to your service or platform.
 
-## Install and require
+## Install
 
-    #**$npm install gengo-node**
+    $npm install gengo-node
+
+## require
 
     Gengo = require Gengo
     gengoClient = new Gengo {public: YOUR_PUBLIC_KEY, private: your_private_key}
@@ -60,7 +62,7 @@ Now that we have the order ID we can check on the status of the order.
     Gengo.getOrder blog_post_order_id, (res) ->
       blog_post_job_ids = res.order.jobs_available
       console.log res
-      
+
       ###
       {
         "order": {
