@@ -44,15 +44,15 @@ Since the Gengo API is designed to support thousnads of jobs, there is a queuein
       blog_post_order_id = res.order_id
       console.log res
 
-<- response
-
-    {
-      "order_id": "139370",
-      "group_id": 23015,
-      "job_count": "2",
-      "credits_used": "3.50",
-      "currency": "USD"
-    }
+      ###
+      {
+        "order_id": "139370",
+        "group_id": 23015,
+        "job_count": "2",
+        "credits_used": "3.50",
+        "currency": "USD"
+      }
+      ###
 
 Now that we have the order ID we can check on the status of the order.
   
@@ -60,22 +60,24 @@ Now that we have the order ID we can check on the status of the order.
     Gengo.getOrder blog_post_order_id, (res) ->
       blog_post_job_ids = res.order.jobs_available
       console.log res
-
-    {
-      "order": {
-        "order_id": "139370",
-        "total_credits": "3.50",
-        "currency": "USD",
-        "total_units": 17,
-        "as_group": 1,
-        "jobs_available": [
-          "243646",
-          "243647",
-        ],
-        "jobs_pending": [],
-        "jobs_reviewable": [],
-        "jobs_approved": [],
-        "jobs_queued": 0,
-        "total_jobs": "2"
+      
+      ###
+      {
+        "order": {
+          "order_id": "139370",
+          "total_credits": "3.50",
+          "currency": "USD",
+          "total_units": 17,
+          "as_group": 1,
+          "jobs_available": [
+            "243646",
+            "243647",
+          ],
+          "jobs_pending": [],
+          "jobs_reviewable": [],
+          "jobs_approved": [],
+          "jobs_queued": 0,
+          "total_jobs": "2"
+        }
       }
-    }
+      ###
