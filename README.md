@@ -16,7 +16,7 @@ $npm install gengo-node
 ```CoffeeScript
 Gengo = require Gengo
 gengoClient = new Gengo {public: YOUR_PUBLIC_KEY, private: your_private_key}
-	```
+```
 
 By default the client sends all requests to the [Gengo Sandbox environment](http://sandbox.gengo.com "Sandbox environment | Gengo.com").
 
