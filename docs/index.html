@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Gengo's Human Translation API Client</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          
+          <h1>Gengo&#39;s Human Translation API Client</h1>
+<p>This is a fairly basic class that maps directly to the documentation found at <a href="http://developers.gengo.com" title="Developer documentation | Gengo.com"><a href="http://developers.gengo.com">http://developers.gengo.com</a></a>.</p>
+<p>In addition, there are a few convience functions that extrapolate some of the more complicated yet common tasks when using the Gengo API.</p>
+<h3>Require module dependencies</h3>
+
+          
+            <div class='highlight'><pre>http = require <span class="string">'http'</span></pre></div>
+          
+        
+
+        
+      </div>
+
+      
+        
+        <h3>GengoClient class</h3>
+<p>Our GengoClient class expects an object containing API keys. In production mode, we&#39;ll want to sent sandbox to false.</p>
+
+        
+          <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">GengoClient</span></span>
+  constructor: (keys, <span class="property">@sandbox</span> = <span class="literal">true</span>) -&gt;
+    {<span class="property">@public_key</span>, <span class="property">@private_key</span>} = keys
+
+  getAccountCurrent: -&gt;
+    {credits: <span class="string">"25.32"</span>}</pre></div>
+        
+      
+        
+        <h3>GengoJob class</h3>
+<p>This class represents a <a href="http://developers.gengo.com/v2/payloads" title="Job payloads | Gengo.com">Gengo job payload</a></p>
+
+        
+          <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">GengoJob</span></span>
+  constructor: (options) -&gt;</pre></div>
+        
+      
+        
+        <h3>Export public methods</h3>
+<p>This module now exports the 2 classes for public use.</p>
+
+        
+          <div class='highlight'><pre>exports.GengoClient = GengoClient
+exports.GengoJob = GengoJob</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

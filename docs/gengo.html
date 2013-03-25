@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Gengo's Human Translation API</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          
+          <h1>Gengo&#39;s Human Translation API</h1>
+<h2>Node.js Client | Coffeescript</h2>
+<p>This is a fairly basic class that maps directly to the documentation found at <a href="http://developers.gengo.com" title="Developer documentation | Gengo.com"><a href="http://developers.gengo.com">http://developers.gengo.com</a></a>.</p>
+<p>Currently, this library does not duplicate any validation that the Gengo API does, but in the future this may also change.</p>
+<p>This client does not implement the following Gengo API endpoints, but may in the future.</p>
+<ul>
+<li><a href="http://developers.gengo.com/v2/job/#preview-get" title="Developer documentation | Gengo.com">GET /translate/job/{id}/preview/</a> - core use case has been deprecated </li>
+<li><a href="http://developers.gengo.com/v2/job/#job-get" title="Developer documentation | Gengo.com">GET /translate/job/</a>  - core use case has been replaced by the <a href="http://developers.gengo.com/v2/job/#jobs-by-id-get" title="Developer documentation | Gengo.com">GET /translate/jobs/{ids}</a> endpoint </li>
+<li><a href="http://developers.gengo.com/v2/jobs/#job" title="Developer documentation | Gengo.com">GET /translate/jobs/group/{group_id}/</a> - core use case has been deprecated</li>
+<li><a href="http://developers.gengo.com/v2/job/#revisions-get" title="Developer documentation | Gengo.com">GET /translate/job/{id}/revisions/</a></li>
+<li><a href="http://developers.gengo.com/v2/job/#revision-get" title="Developer documentation | Gengo.com">GET /translate/job/{id}/revision/{rev_id}/</a></li>
+<li><a href="http://developers.gengo.com/v2/job/#feedback-get" title="Developer documentation | Gengo.com">GET /translate/job/{id}/feedback/</a></li>
+</ul>
+<p>This library currently does not have any dependencies outside of core Node modules. However, in the future this may change.</p>
+
+          
+            <div class='highlight'><pre>http = require <span class="string">'http'</span>
+qs = require <span class="string">'querystring'</span>
+crypto = require <span class="string">'crypto'</span></pre></div>
+          
+        
+
+        
+      </div>
+
+      
+        
+        <h3>GengoClient class</h3>
+<p>Our GengoClient class expects an object containing API keys. This client is set to use the <a href="http://sandbox.gengo.com" title="Developer sandbox | Gengo.com">developer sandbox</a> by default.</p>
+<p>In production mode, you&#39;ll want to pass TRUE as a 2nd paramater.</p>
+
+        
+          <div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">GengoClient</span></span>
+  <span class="property">@sandbox_base_host</span> = <span class="string">'api.sandbox.gengo.com'</span>
+  <span class="property">@live_base_host</span> = <span class="string">'api.gengo.com'</span>
+  <span class="property">@api_version</span> = <span class="string">'v2'</span>
+
+  base_host = <span class="property">@sandbox_base_host</span>
+  api_keys =
+    public: <span class="literal">null</span>
+    private: <span class="literal">null</span>
+
+  constructor: (<span class="property">@api_keys</span>, use_production = <span class="literal">false</span>) -&gt;
+    <span class="property">@base_host</span> = GengoClient.live_base_host <span class="keyword">if</span> use_production <span class="keyword">is</span> <span class="literal">true</span></pre></div>
+        
+      
+        
+        <p>Most endpoints only require a callback function which the Gengo API&#39;s response is passed into as a parsed JSON object.</p>
+<h3>GET endpoints</h3>
+
+        
+          <div class='highlight'><pre>  getBalance: (<span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">'account/balance/'</span>, callback
+
+  getStats: (<span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">'account/stats/'</span>, callback
+
+  getLanguagePairs: (<span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">'translate/service/language_pairs/'</span>, callback
+
+  getLanguages: (<span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">'translate/service/languages/'</span>, callback</pre></div>
+        
+      
+        
+        <p>This function has been renamed a bit from it&#39;s endpoint to clarifiy what result will be returned.</p>
+
+        
+          <div class='highlight'><pre>  getAllGlossaries: (<span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">'translate/glossary'</span>, callback
+
+  getGlossary: (glossary_id, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">"translate/glossary/<span class="subst">#{glossary_id}</span>/"</span>, callback</pre></div>
+        
+      
+        
+        <p>This function expects an array of job_ids, not a comma seperated string like the Gengo documentation suggests. </p>
+
+        
+          <div class='highlight'><pre>  getJobsByID: (job_ids, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">"translate/jobs/<span class="subst">#{job_ids.join ','}</span>/"</span>, callback
+
+  getJobComments: (job_id, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">"translate/jobs/<span class="subst">#{job_id}</span>/comments/"</span>, callback
+
+  getOrder: (order_id, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'GET'</span>, <span class="string">"translate/order/<span class="subst">#{order_id}</span>/"</span>, callback</pre></div>
+        
+      
+        
+        <h3>DELETE endpoints</h3>
+<p>These have been renamed for clarity.</p>
+<blockquote>
+<p>This can only cancel if the translator has not yet started working.</p>
+</blockquote>
+
+        
+          <div class='highlight'><pre>  cancelOrder: (order_id, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'DELETE'</span>, <span class="string">"translate/order/<span class="subst">#{order_id}</span>/"</span>, callback
+
+  cancelJob: (job_id, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'DELETE'</span>, <span class="string">"translate/job/<span class="subst">#{job_id}</span>/"</span>, callback</pre></div>
+        
+      
+        
+        <h3>PUT endpoints</h3>
+<p>Here are few convience functions that all PUT to the same URL. Feel free to use the updateJob endpoint directly.</p>
+
+        
+          <div class='highlight'><pre>  approveJob: (job_id, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@updateJob</span> job_id, {action: <span class="string">'approve'</span>}, callback
+
+  reviseJob: (job_id, comment_for_translator, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@updateJob</span> job_id, {action: <span class="string">'revise'</span>, comment: comment_for_translator}, callback
+
+  rejectJob: (job_id, reject_data, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    reject_data.action = <span class="string">'reject'</span>
+    <span class="property">@updateJob</span> job_id, reject_data, callback
+
+  updateJob: (job_id, data, <span class="function"><span class="title">callback</span></span> = (res) -&gt;) -&gt;
+    <span class="property">@_makeRequest</span> <span class="string">'PUT'</span>, <span class="string">"translate/job/<span class="subst">#{job_id}</span>/"</span>, callback, data</pre></div>
+        
+      
+        
+        <h3>POST endpoints</h3>
+<p>We expect an object containing <a href="http://developers.gengo.com/v2/payloads/#job-payload---for-submissions" title="Developer documentation | Payloads | Gengo.com">Gengo job payloads</a>. </p>
+<p><strong>Note:</strong> Although the Gengo API defaults as_group to 0, this client does the opposite. This client also automatically sets the position paramater for every payload. </p>
+
+        
+          <div class='highlight'><pre>  postJobs: (job_payloads, <span class="function"><span class="title">callback</span></span> = ((res) -&gt;), as_group = <span class="number">1</span>) -&gt;
+    position = <span class="number">0</span>
+    <span class="keyword">for</span> slug, job <span class="keyword">of</span> job_payloads
+      job.position = position
+      position += <span class="number">1</span>
+    data =
+      jobs: job_payloads
+      as_group: <span class="keyword">if</span> job_payloads.length <span class="keyword">is</span> <span class="number">1</span> <span class="keyword">then</span> <span class="number">0</span> <span class="keyword">else</span> as_group
+    <span class="property">@_makeRequest</span> <span class="string">'POST'</span>, <span class="string">'translate/jobs/'</span>, callback, data</pre></div>
+        
+      
+        
+        <h3>Authenticating and making a request to the Gengo API</h3>
+<p>All end points require a signature to be created against the timestamp of the call and the Gengo API private key.</p>
+
+        
+          <div class='highlight'><pre>  _makeRequest: (req_method, endpoint, callback, param_data = {}) -&gt;
+    gengo_params =
+      api_key: <span class="property">@api_keys</span>.public
+      ts: String (Math.round <span class="keyword">new</span> Date().getTime() / <span class="number">1000</span>)
+      data: JSON.stringify param_data
+    gengo_params.api_sig = (crypto.createHmac <span class="string">'sha1'</span>, <span class="property">@api_keys</span>.private).update(gengo_params.ts).digest(<span class="string">"hex"</span>)
+    qs_params = qs.stringify gengo_params <span class="comment">#query string</span></pre></div>
+        
+      
+        
+        <p>Set some basic HTTP headers depending on the method type for the call. GET and DELETE requests require the querystring to be appended to the endpoint. </p>
+
+        
+          <div class='highlight'><pre>    req_headers =
+      <span class="string">'User-Agent'</span>: <span class="string">'gengo_nodejs v2'</span>
+      <span class="string">'Accept'</span>: <span class="string">'application/json'</span>
+    <span class="keyword">if</span> req_method <span class="keyword">is</span> <span class="string">'GET'</span> <span class="keyword">or</span> req_method <span class="keyword">is</span> <span class="string">'DELETE'</span>
+      endpoint += <span class="string">"?<span class="subst">#{qs_params}</span>"</span>
+    <span class="keyword">else</span>
+      req_headers[<span class="string">'Content-Length'</span>] = qs_params.length
+      req_headers[<span class="string">'Content-Type'</span>] = <span class="string">'application/x-www-form-urlencoded'</span>
+
+    req_options =
+      method: req_method
+      host: <span class="property">@base_host</span>
+      path: <span class="string">"/<span class="subst">#{GengoClient.api_version}</span>/<span class="subst">#{endpoint}</span>"</span>
+      headers: req_headers</pre></div>
+        
+      
+        
+        <p>Once the response has come back, the callback is passed a JSON.parsed response_body.</p>
+
+        
+          <div class='highlight'><pre>    req = http.request req_options, (res) -&gt;</pre></div>
+        
+      
+        
+        <p>console.log &quot;Status code: #{res.statusCode}&quot;
+console.log &quot;HEADERS: #{JSON.stringify res.headers}&quot;</p>
+
+        
+          <div class='highlight'><pre>      response_body = <span class="string">''</span>
+      res.<span class="literal">on</span> <span class="string">'data'</span>, (chunk) -&gt;
+        response_body += <span class="string">"<span class="subst">#{chunk}</span>"</span>
+      res.<span class="literal">on</span> <span class="string">'end'</span>, () -&gt;
+          response_body = JSON.parse response_body
+          <span class="keyword">if</span> response_body.opstat <span class="keyword">is</span> <span class="string">'error'</span>
+            callback response_body.err
+          <span class="keyword">else</span>
+            callback response_body.response
+
+    req.write qs_params
+    req.<span class="literal">on</span> <span class="string">'error'</span>, (e) -&gt;
+      console.log e
+
+    req.end()</pre></div>
+        
+      
+        
+        <p>That&#39;s it, export the class for public use.</p>
+
+        
+          <div class='highlight'><pre>exports.Gengo = GengoClient</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

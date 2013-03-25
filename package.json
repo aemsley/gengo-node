@@ -1,0 +1,37 @@
+{
+  "name": "gengo-node",
+  "version": "1.0",
+  "author": "Adam Emsley <adam@gengo.com>",
+  "description": "An client for Gengo's human translation API",
+  "contributors": [
+    {
+      "name": "Adam Emsley",
+      "email": "adam@gengo.com",
+      "url": "http://gengo.com/"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aemsley/gengo-node.git"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "keywords": [
+    "gengo",
+    "translation",
+    "localization",
+    "i18n",
+    "l18n"
+  ],
+  "main": "index.js",
+  "devDependencies": {
+    "docco": "~0.4.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-coffee": "~0.6.3",
+    "chai": "~1.5.0"
+  },
+  "scripts": {
+    "test": "cake test"
+  }
+}

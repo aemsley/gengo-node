@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>GENGO'S HUMAN TRANSLATION API</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          
+          <h1>GENGO&#39;S HUMAN TRANSLATION API</h1>
+<p>Gengo makes it easy to plug human powered translation in to your service or platform.</p>
+<h2>Install and require</h2>
+<p><strong>$npm install gengo-node</strong></p>
+
+          
+            <div class='highlight'><pre>Gengo = require Gengo
+gengoClient = <span class="keyword">new</span> Gengo {public: YOUR_PUBLIC_KEY, private: your_private_key}</pre></div>
+          
+        
+
+        
+      </div>
+
+      
+        
+        <p>By default the client sends all requests to the <a href="http://sandbox.gengo.com" title="Sandbox environment | Gengo.com">Gengo Sandbox environment</a>.</p>
+<h2>Send a couple of jobs for translation</h2>
+<p>First we create a couple of jobs that represent a blog post. I&#39;ve only set a few of the options here, but check out <a href="http://developers.gengo.com/payloads/" title="Job payloads | Developer documentation | Gengo.com">the job payloads</a> for a full list.</p>
+
+        
+          <div class='highlight'><pre>blog_post =
+  title:
+    lc_src: <span class="string">'en'</span>
+    lc_tgt: <span class="string">'ja'</span>
+    tier: <span class="string">'standard'</span>
+    body_src: <span class="string">"This is the title of my blog post"</span>
+    custom_data: {blog_post_id: <span class="number">2322</span>, part: <span class="string">'title'</span>}
+    callback_url: <span class="string">"http://mysite.com/gengo_callback/"</span>
+  body:
+    lc_src: <span class="string">'en'</span>
+    lc_tgt: <span class="string">'ja'</span>
+    tier: <span class="string">'standard'</span>
+    body_src: <span class="string">"This is the body content of my blog post"</span>
+    custom_data: {blog_post_id: <span class="number">2322</span>, part: <span class="string">'body'</span>}
+    callback_url: <span class="string">"http://mysite.com/gengo_callback/"</span></pre></div>
+        
+      
+        
+        <p>There are two important concepts in this payload.</p>
+<ol>
+<li><p>custom_data: Here we&#39;ve added 2 bits of information that will help us map the translated content back to our own system. In this example a blog post ID and the part of the post.</p>
+</li>
+<li><p>callback_url: Since there will be real human translators working on the content it may take a bit of time. Once the translation is ready we&#39;ll post the translation to the URL provided along with the custom_data and order details.</p>
+</li>
+</ol>
+<p>Since the Gengo API is designed to support thousnads of jobs, there is a queueing mechanism placed in front of the API. This means that when a jobs are sent, we reply with an order_id and put the jobs in a queue.</p>
+
+        
+          <div class='highlight'><pre>blog_post_order_id = <span class="literal">null</span>
+Gengo.postJobs blog_post, (res) -&gt;
+  blog_post_order_id = res.order_id
+  console.log res</pre></div>
+        
+      
+        
+        <p>&lt;- response</p>
+
+        
+          <div class='highlight'><pre>{
+  <span class="string">"order_id"</span>: <span class="string">"139370"</span>,
+  <span class="string">"group_id"</span>: <span class="number">23015</span>,
+  <span class="string">"job_count"</span>: <span class="string">"2"</span>,
+  <span class="string">"credits_used"</span>: <span class="string">"3.50"</span>,
+  <span class="string">"currency"</span>: <span class="string">"USD"</span>
+}</pre></div>
+        
+      
+        
+        <p>Now that we have the order ID we can check on the status of the order.</p>
+
+        
+          <div class='highlight'><pre>blog_post_job_ids = <span class="literal">null</span>
+Gengo.getOrder blog_post_order_id, (res) -&gt;
+  blog_post_job_ids = res.order.jobs_available
+  console.log res</pre></div>
+        
+      
+        
+        <p>&lt;- response</p>
+
+        
+          <div class='highlight'><pre>{
+  <span class="string">"order"</span>: {
+    <span class="string">"order_id"</span>: <span class="string">"139370"</span>,
+    <span class="string">"total_credits"</span>: <span class="string">"3.50"</span>,
+    <span class="string">"currency"</span>: <span class="string">"USD"</span>,
+    <span class="string">"total_units"</span>: <span class="number">17</span>,
+    <span class="string">"as_group"</span>: <span class="number">1</span>,
+    <span class="string">"jobs_available"</span>: [
+      <span class="string">"243646"</span>,
+      <span class="string">"243647"</span>,
+    ],
+    <span class="string">"jobs_pending"</span>: [],
+    <span class="string">"jobs_reviewable"</span>: [],
+    <span class="string">"jobs_approved"</span>: [],
+    <span class="string">"jobs_queued"</span>: <span class="number">0</span>,
+    <span class="string">"total_jobs"</span>: <span class="string">"2"</span>
+  }
+}</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
