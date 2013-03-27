@@ -4,7 +4,7 @@ Gengo makes it easy to plug human powered translation in to your service or plat
 
 ## Install
 
-    $npm install gengo-node
+  $npm install gengo-node
 
 ## Require
 

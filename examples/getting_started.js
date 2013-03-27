@@ -1,8 +1,6 @@
 (function() {
   var Gengo, blog_post, blog_post_job_ids, blog_post_order_id, gengoClient;
 
-  $npm(install(gengo - node));
-
   Gengo = require(Gengo);
 
   gengoClient = new Gengo({

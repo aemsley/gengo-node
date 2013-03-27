@@ -6,7 +6,8 @@ module.exports = function(grunt) {
       compile: {
         files: {
           'lib/gengo.js': 'src/gengo.coffee.md',
-          'examples/getting_started.js': 'src/examples/getting_started.coffee.md'
+          'examples/getting_started.js': 'src/examples/getting_started.coffee.md',
+          'examples/misc.js': 'src/examples/misc.coffee.md'
         }
       }
     }

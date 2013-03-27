@@ -160,19 +160,21 @@ Set some basic HTTP headers depending on the method type for the call. GET and D
           path: "/#{GengoClient.api_version}/#{endpoint}"
           headers: req_headers
 
-Once the response has come back, the callback is passed the parsed response_body.
+Once the response has come back, the callback is passed the parsed response_body. Some Gengo responses return nothing
 
-        console.log req_options        
         req = http.request req_options, (res) ->
           response_body = ''
           res.on 'data', (chunk) ->
             response_body += "#{chunk}"
           res.on 'end', () ->
+            if(response_body)
               response_body = JSON.parse response_body
               if response_body.opstat is 'error'
                 callback response_body.err
               else
                 callback response_body.response
+            else
+              callback {}
 
         req.write qs_params
         req.on 'error', (e) ->
