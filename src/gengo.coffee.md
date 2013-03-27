@@ -33,13 +33,13 @@ In production mode, you'll want to pass TRUE as a 2nd paramater.
       @live_base_host = 'api.gengo.com'
       @api_version = 'v2'
 
-      base_host = @sandbox_base_host
+      base_host = null
       api_keys =
         public: null
         private: null
 
       constructor: (@api_keys, use_production = false) ->
-        @base_host = GengoClient.live_base_host if use_production is true
+        @base_host = if use_production then GengoClient.live_base_host else GengoClient.sandbox_base_host
 
 ### GET endpoints
 
@@ -161,7 +161,8 @@ Set some basic HTTP headers depending on the method type for the call. GET and D
           headers: req_headers
 
 Once the response has come back, the callback is passed the parsed response_body.
-        
+
+        console.log req_options        
         req = http.request req_options, (res) ->
           response_body = ''
           res.on 'data', (chunk) ->

@@ -1,7 +1,7 @@
 chai = require 'chai'
 chai.should()
 
-{Gengo} = require '../src/client'
+{Gengo} = require '../src/gengo'
 
 describe 'A Gengo client on the sandbox environment', ->
   public_key = 'Z0dOG$I2smAVKg[yp3qv{9iQrFI7HliKN8w3=_4W_hFRFBf=DCVRiT~4F7]HO@XE'
@@ -35,6 +35,7 @@ describe 'A Gengo client on the sandbox environment', ->
 
   it 'should have API keys', ->
     gengo.should.have.property('api_keys')
+    console.log gengo
   # we start by posting 2 jobs, and then running other tests to give it time to get into Gengo's system
   it 'should post 1 job successfully', (done) ->
     gengo.postJobs test_order_1, (res) ->
@@ -78,18 +79,3 @@ describe 'A Gengo client on the sandbox environment', ->
       res.jobs.should.be.an('array')
       res.jobs[0].should.have.property('status').equal('available')
       done()
-  describe 'and on the production environment', ->
-    # keys for live testing
-    public_key = ')SrBf3dqbfT0Q[$Os-6i4RE(u)6BTxqOm$$dj_oLutaHUw-AJlbgM~rFde|{_u5F'
-    private_key = 'evz_jZ_PBVzdRb2FJn^Iyl5-tMABc5Z$V2inii_R86mtx8Xy2BPW0C$4{0|{lYcx'
-    gengo = new Gengo {'public': public_key, 'private': private_key}, true
-    it 'should find a list of glossaries', (done) ->
-      gengo.getAllGlossaries (res) ->
-        res.should.be.an('array')
-        res[0].should.have.property('id').equal(376)
-        done()
-    it 'should find glossary #376 is connected to user #7056', (done) ->
-      # Should note that this does not bring back any more information than the list call
-      gengo.getGlossary 376, (res) ->
-        res.should.have.property('customer_user_id').equal(7056)
-        done()
