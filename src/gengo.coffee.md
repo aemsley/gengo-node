@@ -114,7 +114,7 @@ This function expects an object containing [Gengo job payloads](http://developer
 
       postJobs: (job_payloads, callback = ((res) ->), as_group = 1) ->
         position = 0
-        for slug, job of job_payloads
+        for key, job of job_payloads
           job.position = position
           position += 1
         data =

@@ -10,14 +10,18 @@ describe 'A Gengo client on the sandbox environment', ->
   # We'll use these for testing
   test_order_1 = 
     test_job_1:
+      slug: "test_job_1"
       body_src: "This is a test from gengo_node ##{Math.floor Math.random()*1001}"
       lc_src: 'en'
       lc_tgt: 'ja'
       type: 'text'
       tier: 'standard'
+      auto_approve: '1',
+      use_preferred: '1',
       custom_data: '{test_job_number: 1}'
   test_order_2 = 
     test_job_2:
+      slug: "test_job_2"
       body_src: "This is a test from gengo_node ##{Math.floor Math.random()*1001}"
       lc_src: 'en'
       lc_tgt: 'ja'
@@ -25,17 +29,17 @@ describe 'A Gengo client on the sandbox environment', ->
       tier: 'standard'
       custom_data: '{test_job_number: 2}'
     test_job_3:
+      slug: "test_job_3"
       body_src: "This is a test from gengo_node ##{Math.floor Math.random()*1001}"
       lc_src: 'en'
       lc_tgt: 'ja'
       type: 'text'
       tier: 'standard'
       custom_data: '{test_job_number: 3}'
-  test_order_1_id = test_order_2_id = test_job_1_id = test_job_2_id = test_job_3_id = null
+  test_order_1_id = test_order_2_id = test_order_3_id = test_job_1_id = test_job_2_id = test_job_3_id = null
 
   it 'should have API keys', ->
     gengo.should.have.property('api_keys')
-    console.log gengo
   # we start by posting 2 jobs, and then running other tests to give it time to get into Gengo's system
   it 'should post 1 job successfully', (done) ->
     gengo.postJobs test_order_1, (res) ->
@@ -77,5 +81,16 @@ describe 'A Gengo client on the sandbox environment', ->
   it "should get 2 job payloads", (done) ->
     gengo.getJobsByID [test_job_2_id, test_job_3_id], (res) ->
       res.jobs.should.be.an('array')
-      res.jobs[0].should.have.property('status').equal('available')
+      res.jobs[1].should.have.property('status').equal('available')
       done()
+  it "should find a previously ordered job and not order it", (done) ->
+    gengo.postJobs test_order_1, (res) ->
+      res.should.have.property('jobs')
+      # confirm the key and and custom data and the job id stuffs
+      # confirm no order info
+      done()
+  it "should order the duplicate job if forced is set", (done) ->
+    test_order_1.test_job_1.force = 1
+    gengo.postJobs test_order_1, (res) ->
+     res.credits_used.should.be.above(0)
+     done() 
