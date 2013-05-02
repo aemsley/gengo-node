@@ -1,6 +1,6 @@
 {
   "name": "gengo-node",
-  "version": "1.0",
+  "version": "1.0.0",
   "author": "Adam Emsley <emsley.adam@gmail.com>",
   "description": "A client for Gengo's human translation API",
   "contributors": [
