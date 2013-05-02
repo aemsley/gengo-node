@@ -11,7 +11,7 @@ describe 'A Gengo client on the sandbox environment', ->
   test_order_1 = 
     test_job_1:
       slug: "test_job_1"
-      body_src: "This is a test from gengo_node ##{Math.floor Math.random()*1001}"
+      body_src: "This is a test from gengo_node ##{Math.floor Math.random()*10001}"
       lc_src: 'en'
       lc_tgt: 'ja'
       type: 'text'
@@ -22,7 +22,7 @@ describe 'A Gengo client on the sandbox environment', ->
   test_order_2 = 
     test_job_2:
       slug: "test_job_2"
-      body_src: "This is a test from gengo_node ##{Math.floor Math.random()*1001}"
+      body_src: "This is a test from gengo_node ##{Math.floor Math.random()*10001}"
       lc_src: 'en'
       lc_tgt: 'ja'
       type: 'text'
@@ -30,7 +30,7 @@ describe 'A Gengo client on the sandbox environment', ->
       custom_data: '{test_job_number: 2}'
     test_job_3:
       slug: "test_job_3"
-      body_src: "This is a test from gengo_node ##{Math.floor Math.random()*1001}"
+      body_src: "This is a test from gengo_node ##{Math.floor Math.random()*10001}"
       lc_src: 'en'
       lc_tgt: 'ja'
       type: 'text'

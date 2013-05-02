@@ -60,7 +60,7 @@ Most endpoints only require a callback function which the Gengo API's response i
 This function has been renamed a bit from it's endpoint to clarifiy what result will be returned.
 
       getAllGlossaries: (callback = (res) ->) ->
-        @_makeRequest 'GET', 'translate/glossary', callback
+        @_makeRequest 'GET', 'translate/glossary/', callback
 
       getGlossary: (glossary_id, callback = (res) ->) ->
         @_makeRequest 'GET', "translate/glossary/#{glossary_id}/", callback
@@ -168,6 +168,7 @@ Once the response has come back, the callback is passed the parsed response_body
             response_body += "#{chunk}"
           res.on 'end', () ->
             if(response_body)
+              # console.log response_body
               response_body = JSON.parse response_body
               if response_body.opstat is 'error'
                 callback response_body.err
