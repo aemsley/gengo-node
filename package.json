@@ -1,6 +1,6 @@
 {
   "name": "gengo-node",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Adam Emsley <emsley.adam@gmail.com>",
   "description": "A client for Gengo's human translation API",
   "contributors": [
@@ -31,6 +31,5 @@
     "grunt-contrib-coffee": "~0.6.3",
     "chai": "~1.5.0"
   },
-  "scripts": {
-  }
+  "scripts": {}
 }
