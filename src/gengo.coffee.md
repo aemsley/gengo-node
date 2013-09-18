@@ -30,7 +30,7 @@ In production mode, you'll want to pass TRUE as a 2nd paramater.
 
     class GengoClient
       @sandbox_base_host = 'api.sandbox.gengo.com'
-      @live_base_host = 'api.qa.gengo.com'
+      @live_base_host = 'api.gengo.com'
       @api_version = 'v2'
 
       base_host = null
