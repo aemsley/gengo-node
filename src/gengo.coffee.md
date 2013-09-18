@@ -30,7 +30,7 @@ In production mode, you'll want to pass TRUE as a 2nd paramater.
 
     class GengoClient
       @sandbox_base_host = 'api.sandbox.gengo.com'
-      @live_base_host = 'api.gengo.com'
+      @live_base_host = 'api.qa.gengo.com'
       @api_version = 'v2'
 
       base_host = null
@@ -117,6 +117,8 @@ This function expects an object containing [Gengo job payloads](http://developer
         for key, job of job_payloads
           job.position = position
           position += 1
+          job.slug = key
+          job.custom_data ?= JSON.stringify job.custom_data
         data =
           jobs: job_payloads
           as_group: if job_payloads.length is 1 then 0 else as_group
@@ -168,7 +170,7 @@ Once the response has come back, the callback is passed the parsed response_body
             response_body += "#{chunk}"
           res.on 'end', () ->
             if(response_body)
-              # console.log response_body
+              #console.log response_body
               response_body = JSON.parse response_body
               if response_body.opstat is 'error'
                 callback response_body.err
