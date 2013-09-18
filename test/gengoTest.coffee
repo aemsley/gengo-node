@@ -51,6 +51,11 @@ describe 'A Gengo client on the sandbox environment', ->
       res.credits_used.should.be.above(0)
       test_order_2_id = res.order_id
       done()
+  it 'should get a quote for a job', (done) ->
+    gengo.postQuote test_order_1, (res) ->
+      res.jobs.should.be.an('array')
+      res.jobs[1].should.have.property('unit_count').below(0)
+      done()
   it 'should have credits in the account', (done) ->
     gengo.getBalance (res) ->
       res.credits.should.be.above(0)
